@@ -1,0 +1,6 @@
+[submodule "qtcoap"]
+	path = qtcoap
+	url = https://github.com/dl1xy/qtcoap
+[submodule "sndchips"]
+	path = sndchips
+	url = https://github.com/dl1xy/sndchips
