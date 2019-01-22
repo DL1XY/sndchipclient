@@ -15,12 +15,12 @@
 #include "coap_handler.h"
 #include "udp_handler.h"
 using namespace std;
-class NetworkHandler: public QWidget {
+class NetworkHandler: public QObject {
 
 Q_OBJECT
 
 public:
-    explicit NetworkHandler(QWidget* parent = nullptr);
+    explicit NetworkHandler(QObject* parent = nullptr);
 
     virtual ~NetworkHandler() {
         delete udpHandler;

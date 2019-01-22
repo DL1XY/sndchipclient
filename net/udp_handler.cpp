@@ -1,9 +1,9 @@
-#include "network_handler.h"
+#include "udp_handler.h"
 
-NetworkHandler::NetworkHandler(QObject *parent) : QObject(parent)
-{
+UdpHandler::UdpHandler(QWidget* parent)
+    : QWidget(parent) {
 
-    this->coapHandler = new CoapHandler(this);
+
 }
 /*
 // UDP

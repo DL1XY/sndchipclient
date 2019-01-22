@@ -1,5 +1,5 @@
-#ifndef UDP_COMMON_H
-#define UDP_COMMON_H
+#ifndef UDP_HANDLER_H
+#define UDP_HANDLER_H
 
 #include <QUdpSocket>
 #include <QWidget>
@@ -40,11 +40,11 @@ private:
 
     // UDP Client
     QUdpSocket* udpSocket;
-    void initSocket();
-    void readPendingDatagrams();
+   // void initSocket();
+   // void readPendingDatagrams();
 
     // MQTT
 
 };
 
-#endif // UDP_COMMON_H
+#endif // UDP_HANDLER_H

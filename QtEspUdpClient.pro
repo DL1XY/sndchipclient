@@ -42,7 +42,8 @@ HEADERS += \
     ui/sn76489_noise_widget.h \
     net/network_handler.h \
     net/coap_handler.h \
-    net/udp_handler.h
+    net/udp_handler.h \
+    net/mqtt_handler.h
 FORMS += mainwindow.ui
 SOURCES += main.cpp mainwindow.cpp \
     configwizard.cpp \
@@ -58,7 +59,9 @@ SOURCES += main.cpp mainwindow.cpp \
     ui/sn76489_audiochannel_widget.cpp \
     ui/sn76489_noise_widget.cpp \
     net/network_handler.cpp \
-    net/coap_handler.cpp
+    net/coap_handler.cpp \
+    net/udp_handler.cpp \
+    net/mqtt_handler.cpp
 
 QT += widgets core gui network testlib
 
