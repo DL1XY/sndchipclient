@@ -2,14 +2,14 @@
 #define COAP_HANDLER_H
 #include <QSignalSpy>
 #include "coapnetworkaccessmanager.h"
-class CoapCommon: public QObject
+class CoapHandler: public QObject
 {
     Q_OBJECT
 
 public:
-    explicit CoapCommon(QObject *parent = nullptr);
+    explicit CoapHandler(QObject *parent = nullptr);
 
-    virtual ~CoapCommon()
+    virtual ~CoapHandler()
     {
         delete m_coap;
     }

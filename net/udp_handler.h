@@ -21,14 +21,14 @@ struct UdpCommand
 
 
 
-class UdpCommon: public QWidget {
+class UdpHandler: public QWidget {
 
 Q_OBJECT
 
 public:
-    explicit UdpCommon(QWidget* parent = nullptr);
+    explicit UdpHandler(QWidget* parent = nullptr);
 
-    virtual ~UdpCommon() {
+    virtual ~UdpHandler() {
         delete udpSocket;
 
     }
