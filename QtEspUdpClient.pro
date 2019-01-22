@@ -84,3 +84,8 @@ INCLUDEPATH += $$PWD/qtcoap/coap
 DEPENDPATH += $$PWD/qtcoap/coap
 
 
+
+unix:!macx: LIBS += -L$$PWD/qmqtt/build/lib/ -lqmqtt
+
+INCLUDEPATH += $$PWD/qmqtt/build/include
+DEPENDPATH += $$PWD/qmqtt/build/include

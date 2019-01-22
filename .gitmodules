@@ -4,3 +4,6 @@
 [submodule "sndchips"]
 	path = sndchips
 	url = https://github.com/dl1xy/sndchips
+[submodule "qmqtt"]
+	path = qmqtt
+	url = https://github.com/emqtt/qmqtt
