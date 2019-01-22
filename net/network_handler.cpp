@@ -1,27 +1,28 @@
-#include "wifi_common.h"
+#include "network_handler.h"
 
-WifiCommon::WifiCommon(QWidget* parent)
+NetworkHandler::NetworkHandler(QWidget* parent)
     : QWidget(parent) {
 
-
+    this->coapHandler = new CoapHandler(this);
 }
-
+/*
 // UDP
-void WifiCommon::initSocket()
+void NetworkHandler::initSocket()
 {
     udpSocket = new QUdpSocket(this);
     udpSocket->bind(QHostAddress::LocalHost, 7755);
 }
 
-void WifiCommon::readPendingDatagrams()
+void NetworkHandler::readPendingDatagrams()
 {
 
 }
 
 
 // COAP
-void WifiCommon::initCoap()
+void NetworkHandler::initCoap()
 {
     m_coap = new CoapNetworkAccessManager(this);
     m_uploadData = QByteArray(".oO DATA Oo.");
 }
+*/

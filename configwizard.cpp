@@ -52,24 +52,45 @@ WifiConnectPage::WifiConnectPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Connect to ESP WiFi Device"));
-    setSubTitle(tr("SSID, Password and a stable connection are required to continue. Check network status output for details."));
+  //  setSubTitle(tr("SSID, Password and a stable connection are required to continue. Check network status output for details."));
   //  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/logo1.png"));
 
+    lblIp = new QLabel(tr("IP"));
+    lineEditIp = new QLineEdit(defaultIp);
+    lblIp->setBuddy(lineEditIp);
 
-    lblSsid = new QLabel(tr("&SSID:"));
+
+    lblSsid = new QLabel(tr("SSID:"));
     lineEditSsid = new QLineEdit(defaultSsid);
     lblSsid->setBuddy(lineEditSsid);
+    lblSsid->setEnabled(false);
+    lineEditSsid->setEnabled(false);
 
-
-    lblPassword = new QLabel(tr("&Password:"));
+    lblPassword = new QLabel(tr("Password:"));
     lineEditPassword = new QLineEdit(defaultPassword);
     lblPassword->setBuddy(lineEditPassword);
     lineEditPassword->setEchoMode(QLineEdit::Password);
+    lblPassword->setEnabled(false);
+    lineEditPassword->setEnabled(false);
 
-    btnConnect = new QPushButton("&Connect");
+
+    btnConnect = new QPushButton("Connect");
     textEditStatus = new QTextEdit();
-    cbSave = new QCheckBox("Save WiFi configuration");
-    cbSave->setChecked(true);
+
+    // TODO take this out
+    QWidget* container = new QWidget;
+    QHBoxLayout* hBoxLayout = new QHBoxLayout(container);
+    cbCoap = new QCheckBox("CoAP");
+    cbCoap->setChecked(true);
+    cbUdp = new QCheckBox("UDP");
+    cbUdp->setChecked(true);
+    cbMqtt = new QCheckBox("MQTT");
+    cbMqtt->setChecked(true);
+
+    hBoxLayout->addWidget(cbCoap);
+    hBoxLayout->addWidget(cbUdp);
+    hBoxLayout->addWidget(cbMqtt);
+
     textEditStatus->setReadOnly(true);
     textEditStatus->setText("Not connected");
     groupBox = new QGroupBox(tr("Connection Status"));
@@ -77,7 +98,9 @@ WifiConnectPage::WifiConnectPage(QWidget *parent)
     registerField("ssid*", lineEditSsid);
     registerField("password*", lineEditPassword);
     //registerField("connect*", btnConnect);
-    registerField("save", cbSave);
+    registerField("coap", cbCoap);
+    registerField("udp", cbUdp);
+    registerField("mqtt", cbMqtt);
     registerField("status", textEditStatus);
 
     QVBoxLayout *groupBoxLayout = new QVBoxLayout;
@@ -86,38 +109,49 @@ WifiConnectPage::WifiConnectPage(QWidget *parent)
     groupBox->setLayout(groupBoxLayout);
 
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(lblSsid, 0, 0);
-    layout->addWidget(lineEditSsid, 0, 1);
-    layout->addWidget(lblPassword, 1, 0);
-    layout->addWidget(lineEditPassword, 1, 1);
-    layout->addWidget(cbSave, 2, 1);
-    layout->addWidget(btnConnect, 4, 0, 1, 2);
-    layout->addWidget(groupBox, 5, 0, 1, 2);
+    layout->addWidget(lblIp, 0, 0);
+    layout->addWidget(lineEditIp, 0, 1);
+    layout->addWidget(lblSsid, 1, 0);
+    layout->addWidget(lineEditSsid, 1, 1);
+    layout->addWidget(lblPassword, 2, 0);
+    layout->addWidget(lineEditPassword, 2, 1);
+    layout->addWidget(container, 3, 1);
+    layout->addWidget(btnConnect, 5, 0, 1, 2);
+    layout->addWidget(groupBox, 6, 0, 1, 2);
     setLayout(layout);
 }
 
 void WifiConnectPage::initializePage()
 {
-
-    defaultSsid = "";
+    defaultIp       = "192.168.4.1";
+    defaultSsid     = "";
     defaultPassword = "";
 
-    QFile file("config.txt");
+    QFile file("app.cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
     QTextStream in(&file);
     unsigned int c=0;
     while (!in.atEnd()) {
        QString line = in.readLine();
-       if (c == 0)
+       switch (c)
+       {
+        case 0:
            defaultSsid = line;
-       else if (c == 1)
+           break;
+        case 1:
            defaultPassword = line;
+           break;
+        case 2:
+           defaultIp = line;
+           break;
+       }
        ++c;
     }
 
     lineEditSsid->setText(defaultSsid);
     lineEditPassword->setText(defaultPassword);
+    lineEditIp->setText(defaultIp);
 
 }
 /*

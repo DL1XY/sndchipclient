@@ -41,6 +41,11 @@ protected:
     void initializePage() override;
 
 private:
+
+    QLabel *lblIp;
+    QString defaultIp;
+    QLineEdit *lineEditIp;
+
     QString defaultSsid;
     QString defaultPassword;
 
@@ -49,11 +54,15 @@ private:
     QLineEdit *lineEditSsid;
     QLineEdit *lineEditPassword;
 
+    QCheckBox *cbUdp;
+    QCheckBox *cbCoap;
+    QCheckBox *cbMqtt;
+
     QGroupBox *groupBox;
 
     QPushButton * btnConnect;
     QTextEdit *textEditStatus;
-    QCheckBox *cbSave;
+
 
 
 };

@@ -7,7 +7,10 @@ TEMPLATE = app
 TARGET = QtEspUdpClient
 INCLUDEPATH += .
 
-CONFIG += qwt
+CONFIG += qwt file_copies
+COPIES += config_files
+config_files.files = $$files(*.cfg)
+config_files.path = $$OUT_PWD
 
 # The following define makes your compiler warn you if you use any
 # feature of Qt which has been marked as deprecated (the exact warnings
@@ -25,10 +28,7 @@ HEADERS += \
     configwizard.h \
     configwizard.h \
     mainwindow.h \
-    net/coap_common.h \
-    net/udp_common.h \
-    net/wifi_common.h \
-    controller.h \   
+    controller.h \
     controller/ataritiacontroller.h \
     ui/tab_atari_tia.h \
     ui/tab_saa1099.h \
@@ -39,12 +39,13 @@ HEADERS += \
     ui/saa1099_envelope_widget.h \
     ui/tab_sn76489.h \
     ui/sn76489_audiochannel_widget.h \
-    ui/sn76489_noise_widget.h
+    ui/sn76489_noise_widget.h \
+    net/network_handler.h \
+    net/coap_handler.h \
+    net/udp_handler.h
 FORMS += mainwindow.ui
 SOURCES += main.cpp mainwindow.cpp \
     configwizard.cpp \
-    net/wifi_common.cpp \
-    net/coap_common.cpp \
     controller/ataritiacontroller.cpp \
     ui/tab_atari_tia.cpp \
     ui/tab_saa1099.cpp \
@@ -55,7 +56,9 @@ SOURCES += main.cpp mainwindow.cpp \
     ui/saa1099_envelope_widget.cpp \
     ui/tab_sn76489.cpp \
     ui/sn76489_audiochannel_widget.cpp \
-    ui/sn76489_noise_widget.cpp
+    ui/sn76489_noise_widget.cpp \
+    net/network_handler.cpp \
+    net/coap_handler.cpp
 
 QT += widgets core gui network testlib
 
@@ -76,3 +79,5 @@ unix:!macx: LIBS += -L$$PWD/qtcoap/libqtcoap/build/build-libqtcoap-Debug/ -lqtco
 
 INCLUDEPATH += $$PWD/qtcoap/coap
 DEPENDPATH += $$PWD/qtcoap/coap
+
+

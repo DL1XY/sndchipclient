@@ -1,5 +1,5 @@
-#ifndef COAPCOMMANDS_H
-#define COAPCOMMANDS_H
+#ifndef COAP_HANDLER_H
+#define COAP_HANDLER_H
 #include <QSignalSpy>
 #include "coapnetworkaccessmanager.h"
 class CoapCommon: public QObject
@@ -23,4 +23,4 @@ private slots:
     CoapReply* post(QUrl &url);
     CoapReply* del(QUrl &url);
 };
-#endif // COAPCOMMANDS_H
+#endif // COAP_HANDLER_H

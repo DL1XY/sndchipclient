@@ -1,12 +1,12 @@
-#include "coap_common.h"
+#include "coap_handler.h"
 
-CoapCommon::CoapCommon(QObject *parent) : QObject(parent)
+CoapHandler::CoapHandler(QObject *parent) : QObject(parent)
 {
     m_coap = new CoapNetworkAccessManager(this);
 }
 
 
-CoapReply* CoapCommon::get(QUrl &url)
+CoapReply* CoapHandler::get(QUrl &url)
 {
     CoapRequest request(url);
     qDebug() << request.url().toString();
@@ -20,7 +20,7 @@ CoapReply* CoapCommon::get(QUrl &url)
     return reply;
 }
 
-CoapReply* CoapCommon::put(QUrl &url)
+CoapReply* CoapHandler::put(QUrl &url)
 {
     CoapRequest request(url);
     qDebug() << request.url().toString();
@@ -34,7 +34,7 @@ CoapReply* CoapCommon::put(QUrl &url)
     return reply;
 }
 
-CoapReply* CoapCommon::post(QUrl &url)
+CoapReply* CoapHandler::post(QUrl &url)
 {
     CoapRequest request(url);
     qDebug() << request.url().toString();
@@ -48,7 +48,7 @@ CoapReply* CoapCommon::post(QUrl &url)
     return reply;
 }
 
-CoapReply* CoapCommon::del(QUrl &url)
+CoapReply* CoapHandler::del(QUrl &url)
 {
     CoapRequest request(url);
     qDebug() << request.url().toString();
