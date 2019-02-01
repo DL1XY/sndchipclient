@@ -7,12 +7,16 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <qwt_knob.h>
+#include "controller/ataritiacontroller.h"
+
 class AtariTiaAudioChannelWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AtariTiaAudioChannelWidget(QWidget *parent = nullptr, unsigned int channel = 0);
+    explicit AtariTiaAudioChannelWidget(QWidget *parent = nullptr, qint8 channel = 0);
 
+
+    void setController(AtariTiaController *value);
 
 public slots:
     void volChanged(double value);
@@ -20,13 +24,15 @@ public slots:
     void ctrlChanged(double value);
     void muteToggle(bool val);
     void soloToggle(bool val);
-private:
-    void createMute();
-    void createSolo();
-    void createVolume();
-    void createFrequency();
-    void createControl();
 
+private:
+    void createMuteUi();
+    void createSoloUi();
+    void createVolumeUi();
+    void createFrequencyUi();
+    void createControlUi();
+
+    AtariTiaController *controller;
 
     QwtKnob *dialVolume;
     QwtKnob *dialFrequency;
@@ -35,7 +41,7 @@ private:
 
     QPushButton *btnMute;
     QPushButton *btnSolo;
-    unsigned int channel;
+    qint8 channel;
 
     const int KNOB_WIDTH = 90;
 

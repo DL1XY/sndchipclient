@@ -10,6 +10,10 @@ class TabAtariTia : public QWidget
 public:
     explicit TabAtariTia(QWidget *parent = nullptr);
 
+    AtariTiaAudioChannelWidget *getWidgetAUD0() const;
+
+    AtariTiaAudioChannelWidget *getWidgetAUD1() const;
+
 signals:
 
 public slots:

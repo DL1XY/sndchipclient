@@ -3,6 +3,7 @@
 
 #include <QtWidgets>
 #include <QWizard>
+#include "net/network_handler.h"
 
 class QCheckBox;
 class QGroupBox;
@@ -14,9 +15,12 @@ class ConfigWizard:public QWizard
 {
     Q_OBJECT
 public:
-    ConfigWizard(QWidget *parent = nullptr);
+    ConfigWizard(QWidget *parent = nullptr, NetworkHandler *networkHandler = nullptr);
 
     void accept() override;
+
+private:
+    NetworkHandler *networkHandler;
 };
 
 class IntroPage : public QWizardPage
@@ -30,21 +34,29 @@ private:
     QLabel *label;
 };
 
-class WifiConnectPage : public QWizardPage
+class ServerConnectPage : public QWizardPage
 {
     Q_OBJECT
 
 public:
-    WifiConnectPage(QWidget *parent = nullptr);
+    ServerConnectPage(QWidget *parent = nullptr, NetworkHandler *networkHandler = nullptr);
 
 protected:
     void initializePage() override;
+    bool isComplete() const override;
+
+private slots:
+    void connectNetwork();
 
 private:
 
     QLabel *lblIp;
     QString defaultIp;
     QLineEdit *lineEditIp;
+
+    // TODO
+    QString defaultPort;
+    QLineEdit *lineEditPort;
 
     QString defaultSsid;
     QString defaultPassword;
@@ -63,7 +75,7 @@ private:
     QPushButton * btnConnect;
     QTextEdit *textEditStatus;
 
-
+    NetworkHandler *networkHandler;
 
 };
 
@@ -76,7 +88,7 @@ public:
 
 protected:
     void initializePage() override;
-    //bool validatePage() override;
+
 
 private:
     QListWidget *lvCoapResources;

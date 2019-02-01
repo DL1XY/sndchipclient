@@ -1,13 +1,13 @@
 #include "configwizard.h"
 
 
-ConfigWizard::ConfigWizard(QWidget *parent)
-    : QWizard(parent)
+ConfigWizard::ConfigWizard(QWidget *parent, NetworkHandler *networkHandler)
+    : QWizard(parent), networkHandler(networkHandler)
 {
 
     addPage(new IntroPage);
-    addPage(new WifiConnectPage);
-    addPage(new ResourceSelectPage);
+    addPage(new ServerConnectPage(this, networkHandler));
+    //addPage(new ResourceSelectPage);
 
     QAbstractButton *backButton = this->button(QWizard::FinishButton);
     connect(backButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -48,8 +48,8 @@ IntroPage::IntroPage(QWidget *parent)
     setLayout(layout);
 }
 
-WifiConnectPage::WifiConnectPage(QWidget *parent)
-    : QWizardPage(parent)
+ServerConnectPage::ServerConnectPage(QWidget *parent, NetworkHandler *networkHandler)
+    : QWizardPage(parent), networkHandler(networkHandler)
 {
     setTitle(tr("Connect to ESP WiFi Device"));
   //  setSubTitle(tr("SSID, Password and a stable connection are required to continue. Check network status output for details."));
@@ -81,11 +81,11 @@ WifiConnectPage::WifiConnectPage(QWidget *parent)
     QWidget* container = new QWidget;
     QHBoxLayout* hBoxLayout = new QHBoxLayout(container);
     cbCoap = new QCheckBox("CoAP");
-    cbCoap->setChecked(true);
+    cbCoap->setChecked(false);
     cbUdp = new QCheckBox("UDP");
     cbUdp->setChecked(true);
     cbMqtt = new QCheckBox("MQTT");
-    cbMqtt->setChecked(true);
+    cbMqtt->setChecked(false);
 
     hBoxLayout->addWidget(cbCoap);
     hBoxLayout->addWidget(cbUdp);
@@ -97,6 +97,7 @@ WifiConnectPage::WifiConnectPage(QWidget *parent)
 
     registerField("ssid*", lineEditSsid);
     registerField("password*", lineEditPassword);
+    registerField("ip*", lineEditIp);
     //registerField("connect*", btnConnect);
     registerField("coap", cbCoap);
     registerField("udp", cbUdp);
@@ -119,13 +120,26 @@ WifiConnectPage::WifiConnectPage(QWidget *parent)
     layout->addWidget(btnConnect, 5, 0, 1, 2);
     layout->addWidget(groupBox, 6, 0, 1, 2);
     setLayout(layout);
+
+    connect(btnConnect, SIGNAL(clicked()), this, SLOT(connectNetwork()));
 }
 
-void WifiConnectPage::initializePage()
+void ServerConnectPage::connectNetwork()
+{
+    int portPos = field("ip").toString().indexOf(":");
+    QString ipStr = field("ip").toString().left(portPos);
+    QString portStr = field("ip").toString().mid(portPos+1);
+    textEditStatus->append("Try to connect "+ipStr+" Port:"+portStr);
+
+   // networkHandler->initUdp(ipStr, portStr.toInt());
+}
+
+void ServerConnectPage::initializePage()
 {
     defaultIp       = "192.168.4.1";
     defaultSsid     = "";
     defaultPassword = "";
+    defaultPort = "";
 
     QFile file("app.cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -145,6 +159,9 @@ void WifiConnectPage::initializePage()
         case 2:
            defaultIp = line;
            break;
+        case 3:
+           defaultPort = line;
+           break;
        }
        ++c;
     }
@@ -152,15 +169,24 @@ void WifiConnectPage::initializePage()
     lineEditSsid->setText(defaultSsid);
     lineEditPassword->setText(defaultPassword);
     lineEditIp->setText(defaultIp);
+}
 
-}
-/*
-bool WifiConnectPage::isComplete() const
+bool ServerConnectPage::isComplete() const
 {
-    // loop through field("status") go find connection string
-       return true;
+    bool isSave = true;
+    if (isSave)
+    {
+        QString networkSsid = field("ssid").toString();
+        QString networkPassword = field("password").toString();
+        QFile file("config.txt");
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+            return false;
+        QTextStream out(&file);
+        out << networkSsid << "\n" << networkPassword;
+    };
+    return isSave;
 }
-*/
+
 ResourceSelectPage::ResourceSelectPage(QWidget *parent)
     : QWizardPage(parent)
 {
@@ -191,7 +217,7 @@ ResourceSelectPage::ResourceSelectPage(QWidget *parent)
 
 void ResourceSelectPage::initializePage()
 {
-    bool isSave = field("save").toBool();
+    bool isSave = true;//= field("save").toBool();
     if (isSave)
     {
         QString networkSsid = field("ssid").toString();

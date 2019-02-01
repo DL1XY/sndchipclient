@@ -33,3 +33,13 @@ TabAtariTia::TabAtariTia(QWidget *parent) : QWidget(parent)
     layout->addWidget(widgetAUD1, 0, 2);
     this->setLayout(layout);
 }
+
+AtariTiaAudioChannelWidget *TabAtariTia::getWidgetAUD0() const
+{
+    return widgetAUD0;
+}
+
+AtariTiaAudioChannelWidget *TabAtariTia::getWidgetAUD1() const
+{
+    return widgetAUD1;
+}

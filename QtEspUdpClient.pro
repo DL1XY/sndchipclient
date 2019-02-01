@@ -26,9 +26,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # Input
 HEADERS += \
     configwizard.h \
-    configwizard.h \
     mainwindow.h \
-    controller.h \
     controller/ataritiacontroller.h \
     ui/tab_atari_tia.h \
     ui/tab_saa1099.h \
@@ -40,10 +38,35 @@ HEADERS += \
     ui/tab_sn76489.h \
     ui/sn76489_audiochannel_widget.h \
     ui/sn76489_noise_widget.h \
-    net/network_handler.h \
-    net/coap_handler.h \
-    net/udp_handler.h \
-    net/mqtt_handler.h
+    net/network_handler.h \    
+    net/udp_handler.h \    
+    sndchips/src/atari_tia/atari_tia.h \
+    sndchips/src/saa1099/saa1099.h \
+    sndchips/src/saa1099/saa1099_coap.h \
+    sndchips/src/saa1099/saa1099_udp.h \
+    sndchips/src/sn76489/sn76489.h \
+    sndchips/src/sn76489/sn76489_coap.h \
+    sndchips/src/sn76489/sn76489_udp.h \
+    sndchips/src/sp0256a/sp0256a.h \
+    sndchips/src/sp0256a/sp0256a_coap.h \
+    sndchips/src/sp0256a/sp0256a_udp.h \
+    sndchips/src/ym2149/ym2149.h \
+    sndchips/src/ym2149/ym2149_coap.h \
+    sndchips/src/ym2149/ym2149_udp.h \
+    sndchips/src/ym2151/ym2151.h \
+    sndchips/src/ym2151/ym2151_coap.h \
+    sndchips/src/ym2151/ym2151_udp.h \
+    sndchips/src/ym2413/ym2413.h \
+    sndchips/src/ym2413/ym2413_coap.h \
+    sndchips/src/ym2413/ym2413_udp.h \
+    sndchips/src/ym2610/ym2610.h \
+    sndchips/src/ym2610/ym2610_coap.h \
+    sndchips/src/ym2610/ym2610_udp.h \
+    sndchips/src/ym3812/ym3812.h \
+    sndchips/src/ym3812/ym3812_coap.h \
+    sndchips/src/ym3812/ym3812_udp.h \
+    sndchips/patterns.h
+
 FORMS += mainwindow.ui
 SOURCES += main.cpp mainwindow.cpp \
     configwizard.cpp \
@@ -58,10 +81,9 @@ SOURCES += main.cpp mainwindow.cpp \
     ui/tab_sn76489.cpp \
     ui/sn76489_audiochannel_widget.cpp \
     ui/sn76489_noise_widget.cpp \
-    net/network_handler.cpp \
-    net/coap_handler.cpp \
-    net/udp_handler.cpp \
-    net/mqtt_handler.cpp
+    net/network_handler.cpp \   
+    net/udp_handler.cpp
+
 
 QT += widgets core gui network testlib
 
@@ -69,23 +91,19 @@ INCLUDEPATH += ../../../libs/qwt-6.1.4/include
 DEPENDPATH += ../../../libs/qwt-6.1.4/include
 LIBS += -L../../../libs/qwt-6.1.4/lib/ -lqwt
 
-
-//unix:!macx: LIBS += qtcoap/libqtcoap/build/build-libqtcoap-Debug/ -lqtcoap1
-
-//INCLUDEPATH += qtcoap/coap
-INCLUDEPATH += sndchips
-//DEPENDPATH += qtcoap/coap
+INCLUDEPATH += sndchips/src
 
 LD_LIBRARY_PATH=../../../libs/qwt-6.1.4/lib:$LD_LIBRARY_PATH
 
-unix:!macx: LIBS += -L$$PWD/qtcoap/libqtcoap/build/build-libqtcoap-Debug/ -lqtcoap1
 
-INCLUDEPATH += $$PWD/qtcoap/coap
-DEPENDPATH += $$PWD/qtcoap/coap
+//unix:!macx: LIBS += qtcoap/libqtcoap/build/build-libqtcoap-Debug/ -lqtcoap1
+//INCLUDEPATH += qtcoap/coap
+//DEPENDPATH += qtcoap/coap
 
+//unix:!macx: LIBS += -L$$PWD/qtcoap/libqtcoap/build/build-libqtcoap-Debug/ -lqtcoap1
+//INCLUDEPATH += $$PWD/qtcoap/coap
+//DEPENDPATH += $$PWD/qtcoap/coap
 
-
-unix:!macx: LIBS += -L$$PWD/qmqtt/build/lib/ -lqmqtt
-
-INCLUDEPATH += $$PWD/qmqtt/build/include
-DEPENDPATH += $$PWD/qmqtt/build/include
+//unix:!macx: LIBS += -L$$PWD/qmqtt/build/lib/ -lqmqtt
+//INCLUDEPATH += $$PWD/qmqtt/build/include
+//DEPENDPATH += $$PWD/qmqtt/build/include

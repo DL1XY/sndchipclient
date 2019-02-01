@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include "configwizard.h"
-
+#include "net/network_handler.h"
+#include "controller/ataritiacontroller.h"
 namespace Ui {
 class MainWindow;
 class NetworkDialog;
@@ -21,6 +22,8 @@ private:
     Ui::MainWindow *ui;
     ConfigWizard *wizard;
 
+    NetworkHandler *networkHandler;
+    AtariTiaController *controller;
 
 private slots:
   void showDialog();

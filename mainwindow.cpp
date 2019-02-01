@@ -12,10 +12,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
+    networkHandler = new NetworkHandler(this);
+    controller = new AtariTiaController(this, networkHandler);
 
+    TabAtariTia *tabAtariTia = new TabAtariTia(this);
+    tabAtariTia->getWidgetAUD0()->setController(controller);
+    tabAtariTia->getWidgetAUD1()->setController(controller);
 
     ui->setupUi(this);
-    ui->tabWidget->addTab(new TabAtariTia(this), "Atari TIA" );
+    ui->tabWidget->addTab(tabAtariTia, "Atari TIA" );
     ui->tabWidget->addTab(new TabSaa1099(this), "SAA1099" );
     ui->tabWidget->addTab(new TabSN76489(this), "SN76489" );
     this->setWindowFlags(Qt::Window
@@ -33,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete networkHandler;
     delete ui;
 }
 

@@ -8,13 +8,17 @@
 #include <QObject>
 #include <QHostInfo>
 #include <QHostAddress>
-
-#include <QSignalSpy>
-#include <QtTest>
-
-#include "coap_handler.h"
 #include "udp_handler.h"
-using namespace std;
+
+struct NetworkCmd
+{
+    char target;
+    char cmdId;
+    char dataLength;
+    char *data;
+    char cmdCounter;
+};
+
 class NetworkHandler: public QObject {
 
 Q_OBJECT
@@ -24,21 +28,29 @@ public:
 
     virtual ~NetworkHandler() {
         delete udpHandler;
-        delete coapHandler;
+        //delete coapHandler;
     }
+    void initUdp(QString ip, quint16 port);
+
+    void writeCmd(NetworkCmd &cmd);
+    quint8 getNextCmdCounter();
 
 private:
     QString ssid;
     QString password;
-    QString ip;
-    unsigned int port;
+
+    quint8 cmdCounter = 0;
 
     // Wifi
-    void connectWifi();
-    void disconnectWifi();
+   // void connectWifi();
+   // void disconnectWifi();
 
     // UDP Client
-    UdpHandler* udpHandler;
+    UdpHandler* udpHandler = nullptr;
+
+
+    void readCmd();
+
 
     //void initSocket();
     //void readPendingDatagrams();
@@ -46,11 +58,11 @@ private:
 
 
     // CoAP Client
-    CoapHandler *coapHandler;
+    // CoapHandler *coapHandler;
     //CoapNetworkAccessManager *m_coap;
     //QByteArray m_uploadData;
 
-    void initCoap();
+    //void initCoap();
 
     // MQTT
 

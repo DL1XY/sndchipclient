@@ -1,28 +1,41 @@
 #include "udp_handler.h"
 
-UdpHandler::UdpHandler(QWidget* parent)
-    : QWidget(parent) {
+UdpHandler::UdpHandler(QObject* parent, QString ip, quint16 port)
+    : QObject(parent), ip(ip), port(port){
 
-
+    this->initSocket();
 }
-/*
+
 // UDP
-void NetworkHandler::initSocket()
+void UdpHandler::initSocket()
 {
     udpSocket = new QUdpSocket(this);
-    udpSocket->bind(QHostAddress::LocalHost, 7755);
+    udpSocket->bind(QHostAddress(ip), port);
+
+    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readData()));
+
 }
 
-void NetworkHandler::readPendingDatagrams()
+void UdpHandler::readData()
 {
-
+    while (udpSocket->hasPendingDatagrams()) {
+            QNetworkDatagram datagram = udpSocket->receiveDatagram();
+            UdpCommand cmd;
+            QByteArray data = datagram.data();
+            memcpy(&cmd, data, sizeof(data));
+            processData(cmd);
+        }
 }
 
-
-// COAP
-void NetworkHandler::initCoap()
+void UdpHandler::writeData(UdpCommand &cmd)
 {
-    m_coap = new CoapNetworkAccessManager(this);
-    m_uploadData = QByteArray(".oO DATA Oo.");
+    char buffer[sizeof(cmd)];
+    memcpy(buffer, &cmd, sizeof(cmd));
+    udpSocket->writeDatagram(QNetworkDatagram(buffer));
 }
-*/
+
+void UdpHandler::processData(UdpCommand &cmd)
+{
+    // TODO
+}
+

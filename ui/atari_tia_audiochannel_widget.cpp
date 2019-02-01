@@ -1,16 +1,17 @@
 #include "atari_tia_audiochannel_widget.h"
 #include <QGridLayout>
 #include <QPushButton>
-#include "atari_tia/atari_tia.h"
-AtariTiaAudioChannelWidget::AtariTiaAudioChannelWidget(QWidget *parent, unsigned int channel) : QWidget(parent)
+#include "controller/ataritiacontroller.h"
+
+AtariTiaAudioChannelWidget::AtariTiaAudioChannelWidget(QWidget *parent, qint8 channel) : QWidget(parent)
 {
     this->channel = channel;
 
-    createVolume();
-    createFrequency();
-    createControl();
-    createMute();
-    createSolo();
+    createVolumeUi();
+    createFrequencyUi();
+    createControlUi();
+    createMuteUi();
+    createSoloUi();
 
     QString lblStr = "AUD";
     lblStr.append(QString::number(channel));
@@ -66,7 +67,7 @@ AtariTiaAudioChannelWidget::AtariTiaAudioChannelWidget(QWidget *parent, unsigned
     connect(btnSolo, SIGNAL(toggled(bool)), this, SLOT(soloToggle(bool)));
 }
 
-void AtariTiaAudioChannelWidget::createVolume()
+void AtariTiaAudioChannelWidget::createVolumeUi()
 {
 
     dialVolume = new QwtKnob(this);
@@ -81,7 +82,7 @@ void AtariTiaAudioChannelWidget::createVolume()
 
 }
 
-void AtariTiaAudioChannelWidget::createFrequency()
+void AtariTiaAudioChannelWidget::createFrequencyUi()
 {
     dialFrequency = new QwtKnob(this);
     dialFrequency->setTotalSteps(31);
@@ -94,7 +95,7 @@ void AtariTiaAudioChannelWidget::createFrequency()
     dialFrequency->show();
 }
 
-void AtariTiaAudioChannelWidget::createControl()
+void AtariTiaAudioChannelWidget::createControlUi()
 {
     dialControl = new QwtKnob(this);
     dialControl->setTotalSteps(15);
@@ -107,21 +108,28 @@ void AtariTiaAudioChannelWidget::createControl()
     dialControl->show();
 }
 
+void AtariTiaAudioChannelWidget::setController(AtariTiaController *value)
+{
+    controller = value;
+}
+
 void AtariTiaAudioChannelWidget::volChanged(double value)
-{}
+{
+    controller->changeVolume(channel, static_cast<char>(value));
+}
 
 void AtariTiaAudioChannelWidget::freqChanged(double value)
 {
-
-
+    controller->changeFrequency(channel, static_cast<char>(value));
 }
 
 void AtariTiaAudioChannelWidget::ctrlChanged(double value)
 {
-    ctrlDecText->setText(ATARI_TIA_AUDC_Descriptions[(int)value]);
+    ctrlDecText->setText(ATARI_TIA_AUDC_Descriptions[static_cast<int>(value)]);
+    controller->changeControl(channel, static_cast<char>(value));
 }
 
-void AtariTiaAudioChannelWidget::createMute()
+void AtariTiaAudioChannelWidget::createMuteUi()
 {
     btnMute = new QPushButton("MUTE");
     btnMute->setCheckable(true);
@@ -134,7 +142,7 @@ void AtariTiaAudioChannelWidget::createMute()
 
 }
 
-void AtariTiaAudioChannelWidget::createSolo()
+void AtariTiaAudioChannelWidget::createSoloUi()
 {
     btnSolo = new QPushButton("SOLO");
     btnSolo->setCheckable(true);
@@ -149,9 +157,11 @@ void AtariTiaAudioChannelWidget::createSolo()
 void AtariTiaAudioChannelWidget::muteToggle(bool val)
 {
     isMute = val;
+    // TODO
 }
 
 void AtariTiaAudioChannelWidget::soloToggle(bool val)
 {
     isSolo = val;
+    controller->setStereo(val);
 }
